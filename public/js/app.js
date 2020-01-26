@@ -1876,7 +1876,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     initializeApp: function initializeApp() {
-      var appID = "115794309760c46";
+      var appID = "133766858efe790";
       var cometChatSettings = new _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__["CometChat"].AppSettingsBuilder().subscribePresenceForAllUsers().setRegion("eu").build();
       _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__["CometChat"].init(appID, cometChatSettings).then(function () {
         console.log("Initialization completed successfully");
@@ -1970,17 +1970,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @cometchat-pro/chat */ "./node_modules/@cometchat-pro/chat/CometChat.js");
-/* harmony import */ var _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_NavBar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/NavBar.vue */ "./resources/js/components/NavBar.vue");
-/* harmony import */ var _components_Spinner_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Spinner.vue */ "./resources/js/components/Spinner.vue");
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @cometchat-pro/chat */ "./node_modules/@cometchat-pro/chat/CometChat.js");
+/* harmony import */ var _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_NavBar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/NavBar.vue */ "./resources/js/components/NavBar.vue");
+/* harmony import */ var _components_Spinner_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Spinner.vue */ "./resources/js/components/Spinner.vue");
 
 //
 //
@@ -2051,118 +2046,188 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// @ is an alias to /src
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "home",
-  components: {
-    NavBar: _components_NavBar_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    Spinner: _components_Spinner_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
-  },
   data: function data() {
     return {
       username: "",
-      avatar: "",
-      uid: "",
-      sendingMessage: false,
-      chatMessage: "",
-      loggingOut: false,
-      groupMessages: [],
-      loadingMessages: false
+      password: "",
+      password_confirmation: "",
+      showSpinner: false
     };
   },
-  mounted: function mounted() {
-    var _this = this;
-
-    this.loadingMessages = true;
-    var listenerID = "UNIQUE_LISTENER_ID";
-    var messagesRequest = new _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__["CometChat"].MessagesRequestBuilder().setLimit(100).build();
-    messagesRequest.fetchPrevious().then(function (messages) {
-      console.log("Message list fetched:", messages);
-      console.log("this.groupMessages", _this.groupMessages);
-      _this.groupMessages = [].concat(_toConsumableArray(_this.groupMessages), _toConsumableArray(messages));
-      _this.loadingMessages = false;
-
-      _this.$nextTick(function () {
-        _this.scrollToBottom();
-      });
-    }, function (error) {
-      console.log("Message fetching failed with error:", error);
-    });
-    _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__["CometChat"].addMessageListener(listenerID, new _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__["CometChat"].MessageListener({
-      onTextMessageReceived: function onTextMessageReceived(textMessage) {
-        console.log("Text message received successfully", textMessage); // Handle text message
-
-        console.log(_this.groupMessages);
-        _this.groupMessages = [].concat(_toConsumableArray(_this.groupMessages), [textMessage]);
-        _this.loadingMessages = false;
-
-        _this.$nextTick(function () {
-          _this.scrollToBottom();
-        });
-      }
-    }));
-  },
-  created: function created() {
-    this.getLoggedInUser();
-  },
   methods: {
-    getLoggedInUser: function getLoggedInUser() {
-      var _this2 = this;
+    registerAppUser: function registerAppUser() {
+      var _this = this;
 
-      _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__["CometChat"].getLoggedinUser().then(function (user) {
-        _this2.username = user.name;
-        _this2.avatar = user.avatar;
-        _this2.uid = user.uid;
-      }, function (error) {
-        _this2.$router.push({
-          name: "homepage"
-        });
+      if (this.username && this.password && this.password_confirmation) {
+        if (this.password && this.password_confirmation) {
+          var userData = {
+            username: this.username,
+            password: this.password,
+            password_confirmation: this.password_confirmation
+          };
+          axios.post("http://lara-chat-app-starter.test/api/register", userData).then(function (response) {
+            if (response.data) {
+              _this.createUserOnCometChat(_this.username);
+            }
+          })["catch"](function (error) {
+            alert(error.response.data.message);
+          });
+        }
+      }
+    },
+    createUserOnCometChat: function createUserOnCometChat(username) {
+      var url, data, userResponse, userJson;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function createUserOnCometChat$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              url = "https://api-eu.cometchat.io/v2.0/users";
+              data = {
+                uid: username,
+                name: "".concat(username, " sample"),
+                avatar: "https://data-eu.cometchat.io/assets/images/avatars/captainamerica.png"
+              };
+              _context.prev = 2;
+              _context.next = 5;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch(url, {
+                method: "POST",
+                headers: new Headers({
+                  appid: "133766858efe790",
+                  apikey: "9c132664678569e1b8ff443b495fac3d6ad617a3",
+                  "Content-Type": "application/json"
+                }),
+                body: JSON.stringify(data)
+              }));
 
-        console.log(error);
+            case 5:
+              userResponse = _context.sent;
+              _context.next = 8;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(userResponse.json());
+
+            case 8:
+              userJson = _context.sent;
+              console.log("New User", userJson);
+              this.createAuthTokenAndSaveForUser(username);
+              this.redirectToLogin();
+              _context.next = 17;
+              break;
+
+            case 14:
+              _context.prev = 14;
+              _context.t0 = _context["catch"](2);
+              console.log("Error", _context.t0);
+
+            case 17:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, null, this, [[2, 14]]);
+    },
+    createAuthTokenAndSaveForUser: function createAuthTokenAndSaveForUser(uid) {
+      var url, tokenResponse, tokenJSON;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function createAuthTokenAndSaveForUser$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              url = "https://api-eu.cometchat.io/v2.0/users/".concat(uid, "/auth_tokens");
+              _context2.prev = 1;
+              _context2.next = 4;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch(url, {
+                method: "POST",
+                headers: new Headers({
+                  appid: "133766858efe790",
+                  apikey: "9c132664678569e1b8ff443b495fac3d6ad617a3",
+                  "Content-Type": "application/json"
+                })
+              }));
+
+            case 4:
+              tokenResponse = _context2.sent;
+              _context2.next = 7;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(tokenResponse.json());
+
+            case 7:
+              tokenJSON = _context2.sent;
+              this.addUserToAGroup(uid);
+              this.sendTokenToServer(tokenJSON.data.authToken, tokenJSON.data.uid);
+              _context2.next = 15;
+              break;
+
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](1);
+              console.log("Error Token", _context2.t0);
+
+            case 15:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, null, this, [[1, 12]]);
+    },
+    addUserToAGroup: function addUserToAGroup(uid) {
+      var url, data, groupResponse, groupJson;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function addUserToAGroup$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              url = "https://api-eu.cometchat.io/v2.0/groups/".concat("supergroup", "/members");
+              data = {
+                participants: [uid]
+              };
+              _context3.prev = 2;
+              _context3.next = 5;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch(url, {
+                method: "POST",
+                headers: new Headers({
+                  appid: "133766858efe790",
+                  apikey: "9c132664678569e1b8ff443b495fac3d6ad617a3",
+                  "Content-Type": "application/json"
+                }),
+                body: JSON.stringify(data)
+              }));
+
+            case 5:
+              groupResponse = _context3.sent;
+              _context3.next = 8;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(groupResponse.json());
+
+            case 8:
+              groupJson = _context3.sent;
+              console.log("Added to group", groupJson);
+              _context3.next = 15;
+              break;
+
+            case 12:
+              _context3.prev = 12;
+              _context3.t0 = _context3["catch"](2);
+              console.log("Error", _context3.t0);
+
+            case 15:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, null, null, [[2, 12]]);
+    },
+    sendTokenToServer: function sendTokenToServer(token, uid) {
+      axios.post("http://lara-chat-app-starter.test/api/update/token", {
+        token: token,
+        uid: uid
+      }).then(function (response) {
+        console.log("Token updated successfully", response);
+      })["catch"](function (error) {
+        alert(error.response.data.message);
       });
     },
-    scrollToBottom: function scrollToBottom() {
-      var chat = document.getElementById("msg-page");
-      chat.scrollTo(0, chat.scrollHeight + 30);
-    },
-    sendGroupMessage: function sendGroupMessage() {
-      var _this3 = this;
-
-      this.sendingMessage = true;
-      var receiverID = "supergroup";
-      var messageText = this.chatMessage;
-      var receiverType = _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__["CometChat"].RECEIVER_TYPE.GROUP;
-      var textMessage = new _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__["CometChat"].TextMessage(receiverID, messageText, receiverType);
-      _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__["CometChat"].sendMessage(textMessage).then(function (message) {
-        console.log("Message sent successfully:", message);
-        _this3.chatMessage = "";
-        _this3.sendingMessage = false;
-
-        _this3.$nextTick(function () {
-          _this3.scrollToBottom();
-        });
-      }, function (error) {
-        console.log("Message sending failed with error:", error);
+    redirectToLogin: function redirectToLogin() {
+      this.$router.push({
+        name: "login"
       });
     }
   }
@@ -2215,14 +2280,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       username: "",
-      password: '',
+      password: "",
       showSpinner: false,
-      token: ''
+      token: ""
     };
   },
   methods: {
@@ -2235,14 +2322,17 @@ __webpack_require__.r(__webpack_exports__);
       };
 
       if (this.username && this.password) {
-        axios.post("http://localhost:8000/api/login", userData).then(function (response) {
+        axios.post("http://lara-chat-app-starter.test/api/login", userData).then(function (response) {
+          console.log(response.data.token);
+
           _this.logUserInToCometChat(response.data.token);
         })["catch"](function (error) {
+          console.log(reponse.error);
           alert(error.response.data.message);
           console.log(error.response.data.message);
         });
       } else {
-        alert('Please check your credentials');
+        alert("Please check your credentials");
       }
     },
     logUserInToCometChat: function logUserInToCometChat(token) {
@@ -2251,10 +2341,10 @@ __webpack_require__.r(__webpack_exports__);
       this.showSpinner = true;
       _cometchat_pro_chat__WEBPACK_IMPORTED_MODULE_0__["CometChat"].login(token).then(function () {
         _this2.showSpinner = false;
-        console.log("successfully login user");
+        console.log("successfully logged in");
 
         _this2.$router.push({
-          name: 'chat',
+          name: "chat",
           params: {
             username: _this2.username,
             authenticated: true
@@ -2262,13 +2352,13 @@ __webpack_require__.r(__webpack_exports__);
         });
       }, function (error) {
         _this2.showSpinner = false;
-        alert("Whops. Something went wrong. This commonly happens when you enter a username that doesn't exist. Check the console for more information");
+        alert("Whoops. Something went wrong");
         console.log("Login failed with error:", error.code);
       });
     },
     redirectToRegister: function redirectToRegister() {
       this.$router.push({
-        name: 'register'
+        name: "register"
       });
     }
   }
@@ -2327,12 +2417,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       username: "",
-      password: '',
-      password_confirmation: '',
+      password: "",
+      password_confirmation: "",
       showSpinner: false
     };
   },
@@ -2347,7 +2465,7 @@ __webpack_require__.r(__webpack_exports__);
             password: this.password,
             password_confirmation: this.password_confirmation
           };
-          axios.post("http://localhost:8000/api/register", userData).then(function (response) {
+          axios.post("http://lara-chat-app-starter.test/api/register", userData).then(function (response) {
             if (response.data) {
               _this.createUserOnCometChat(_this.username);
             }
@@ -2363,19 +2481,20 @@ __webpack_require__.r(__webpack_exports__);
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              url = "https://api-eu.cometchat.io/v2.0/users";
+              url = "https://api-eu.cometchat.io/v2/users";
               data = {
                 uid: username,
-                name: "".concat(username, " sample")
+                name: "${username} sample",
+                avatar: "https://data-eu-cometchat.io/assets/images/avatars/captainamerica.png"
               };
               _context.prev = 2;
               _context.next = 5;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch(url, {
-                method: 'POST',
+                method: "POST",
                 headers: new Headers({
-                  appid: "115794309760c46",
-                  apikey: "fa924db7a929e90041fa34ba365ab437ca113338",
-                  'Content-Type': 'application/json'
+                  appid: "133766858efe790",
+                  apikey: "9c132664678569e1b8ff443b495fac3d6ad617a3",
+                  "Content-Type": "application/json"
                 }),
                 body: JSON.stringify(data)
               }));
@@ -2387,7 +2506,7 @@ __webpack_require__.r(__webpack_exports__);
 
             case 8:
               userJson = _context.sent;
-              console.log('New User', userJson);
+              console.log("New User", userJson);
               this.createAuthTokenAndSaveForUser(username);
               this.redirectToLogin();
               _context.next = 17;
@@ -2396,7 +2515,7 @@ __webpack_require__.r(__webpack_exports__);
             case 14:
               _context.prev = 14;
               _context.t0 = _context["catch"](2);
-              console.log('Error', _context.t0);
+              console.log("Error", _context.t0);
 
             case 17:
             case "end":
@@ -2415,11 +2534,11 @@ __webpack_require__.r(__webpack_exports__);
               _context2.prev = 1;
               _context2.next = 4;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch(url, {
-                method: 'POST',
+                method: "POST",
                 headers: new Headers({
-                  appid: "115794309760c46",
-                  apikey: "fa924db7a929e90041fa34ba365ab437ca113338",
-                  'Content-Type': 'application/json'
+                  appid: "133766858efe790",
+                  apikey: "9c132664678569e1b8ff443b495fac3d6ad617a3",
+                  "Content-Type": "application/json"
                 })
               }));
 
@@ -2438,7 +2557,7 @@ __webpack_require__.r(__webpack_exports__);
             case 12:
               _context2.prev = 12;
               _context2.t0 = _context2["catch"](1);
-              console.log('Error Token', _context2.t0);
+              console.log("Error Token", _context2.t0);
 
             case 15:
             case "end":
@@ -2455,16 +2574,16 @@ __webpack_require__.r(__webpack_exports__);
             case 0:
               url = "https://api-eu.cometchat.io/v2.0/groups/".concat("supergroup", "/members");
               data = {
-                "participants": [uid]
+                participants: [uid]
               };
               _context3.prev = 2;
               _context3.next = 5;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(fetch(url, {
-                method: 'POST',
+                method: "POST",
                 headers: new Headers({
-                  appid: "115794309760c46",
-                  apikey: "fa924db7a929e90041fa34ba365ab437ca113338",
-                  'Content-Type': 'application/json'
+                  appid: "133766858efe790",
+                  apikey: "9c132664678569e1b8ff443b495fac3d6ad617a3",
+                  "Content-Type": "application/json"
                 }),
                 body: JSON.stringify(data)
               }));
@@ -2476,14 +2595,14 @@ __webpack_require__.r(__webpack_exports__);
 
             case 8:
               groupJson = _context3.sent;
-              console.log('Added to group', groupJson);
+              console.log("Added to group", groupJson);
               _context3.next = 15;
               break;
 
             case 12:
               _context3.prev = 12;
               _context3.t0 = _context3["catch"](2);
-              console.log('Error', _context3.t0);
+              console.log("Error", _context3.t0);
 
             case 15:
             case "end":
@@ -2493,7 +2612,7 @@ __webpack_require__.r(__webpack_exports__);
       }, null, null, [[2, 12]]);
     },
     sendTokenToServer: function sendTokenToServer(token, uid) {
-      axios.post("http://localhost:8000/api/update/token", {
+      axios.post("http://lara-chat-app-starter.test/api/update/token", {
         token: token,
         uid: uid
       }).then(function (response) {
@@ -2504,7 +2623,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     redirectToLogin: function redirectToLogin() {
       this.$router.push({
-        name: 'login'
+        name: "login"
       });
     }
   }
@@ -39346,210 +39465,160 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "booker" },
-    [
-      _c("nav-bar", { attrs: { name: this.username, avatar: this.avatar } }),
-      _vm._v(" "),
-      _c("div", { staticClass: "chat" }, [
-        _c("div", { staticClass: "container" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "chat-page" }, [
-            _c("div", { staticClass: "msg-inbox" }, [
-              _c("div", { staticClass: "chats", attrs: { id: "chats" } }, [
-                _c(
-                  "div",
-                  { staticClass: "msg-page", attrs: { id: "msg-page" } },
-                  [
-                    _vm.loadingMessages
-                      ? _c(
-                          "div",
-                          { staticClass: "loading-messages-container" },
-                          [
-                            _c("spinner", { attrs: { size: 100 } }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "loading-text" }, [
-                              _vm._v(
-                                "\n                        Loading Messages\n                      "
-                              )
-                            ])
-                          ],
-                          1
-                        )
-                      : !_vm.groupMessages.length
-                      ? _c(
-                          "div",
-                          { staticClass: "text-center img-fluid empty-chat" },
-                          [_vm._m(1), _vm._v(" "), _vm._m(2)]
-                        )
-                      : _c(
-                          "div",
-                          _vm._l(_vm.groupMessages, function(message) {
-                            return _c("div", { key: message.id }, [
-                              message.sender.uid !== _vm.uid
-                                ? _c("div", { staticClass: "received-chats" }, [
-                                    _c(
-                                      "div",
-                                      { staticClass: "received-chats-img" },
-                                      [
-                                        _c("img", {
-                                          staticClass: "avatar",
-                                          attrs: {
-                                            src: message.sender.avatar,
-                                            alt: ""
-                                          }
-                                        })
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "received-msg" }, [
-                                      _c(
-                                        "div",
-                                        { staticClass: "received-msg-inbox" },
-                                        [
-                                          _c("p", [
-                                            _c("span", [
-                                              _vm._v(_vm._s(message.sender.uid))
-                                            ]),
-                                            _c("br"),
-                                            _vm._v(_vm._s(message.data.text))
-                                          ])
-                                        ]
-                                      )
-                                    ])
-                                  ])
-                                : _c("div", { staticClass: "outgoing-chats" }, [
-                                    _c(
-                                      "div",
-                                      { staticClass: "outgoing-chats-msg" },
-                                      [
-                                        _c("p", [
-                                          _vm._v(_vm._s(message.data.text))
-                                        ])
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "outgoing-chats-img" },
-                                      [
-                                        _c("img", {
-                                          staticClass: "avatar",
-                                          attrs: {
-                                            src: message.sender.avatar,
-                                            alt: ""
-                                          }
-                                        })
-                                      ]
-                                    )
-                                  ])
-                            ])
-                          }),
-                          0
-                        )
-                  ]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "msg-bottom" }, [
-              _c(
-                "form",
-                {
-                  staticClass: "message-form",
+  return _c("div", { staticClass: "login-page" }, [
+    _c("div", { staticClass: "login" }, [
+      _c("div", { staticClass: "register-container auth-container" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "register-form-column" }, [
+          _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.registerAppUser($event)
+                }
+              }
+            },
+            [
+              _c("h3", [_vm._v("Create an Account")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-wrapper" }, [
+                _c("label", { attrs: { for: "username" } }, [
+                  _vm._v("Username")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.username,
+                      expression: "username"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    name: "username",
+                    id: "username",
+                    placeholder: "Enter your username",
+                    required: ""
+                  },
+                  domProps: { value: _vm.username },
                   on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.sendGroupMessage($event)
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.username = $event.target.value
                     }
                   }
-                },
-                [
-                  _c(
-                    "div",
-                    { staticClass: "input-group" },
-                    [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.chatMessage,
-                            expression: "chatMessage"
-                          }
-                        ],
-                        staticClass: "form-control message-input",
-                        attrs: {
-                          type: "text",
-                          placeholder: "Type something",
-                          required: ""
-                        },
-                        domProps: { value: _vm.chatMessage },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.chatMessage = $event.target.value
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _vm.sendingMessage
-                        ? _c("spinner", {
-                            staticClass: "sending-message-spinner",
-                            attrs: { size: 30 }
-                          })
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ]
-              )
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-wrapper" }, [
+                _c("label", { attrs: { for: "password" } }, [
+                  _vm._v("Password")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.password,
+                      expression: "password"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "password",
+                    name: "password",
+                    id: "password",
+                    placeholder: "Enter your password",
+                    required: ""
+                  },
+                  domProps: { value: _vm.password },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.password = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-wrapper" }, [
+                _c("label", { attrs: { for: "password_confirmation" } }, [
+                  _vm._v("Confirm Password")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.password_confirmation,
+                      expression: "password_confirmation"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "password",
+                    name: "password_confirmation",
+                    id: "password_confirmation",
+                    placeholder: "Re-enter password",
+                    required: ""
+                  },
+                  domProps: { value: _vm.password_confirmation },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.password_confirmation = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("button", { attrs: { type: "submit" } }, [
+                _vm._v("\n            SIGN UP   \n            "),
+                _vm.showSpinner
+                  ? _c("span", { staticClass: "fa fa-spin fa-spinner" })
+                  : _vm._e()
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "text-center m-t-50 link-reg" }, [
+            _c("p", { on: { click: _vm.redirectToLogin } }, [
+              _vm._v("\n            Do you have an account?\n            "),
+              _c("span", [_vm._v("Log in")])
             ])
           ])
         ])
       ])
-    ],
-    1
-  )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "msg-header" }, [
-      _c("div", { staticClass: "active" }, [_c("h5", [_vm._v("#General")])])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "empty-chat-holder" }, [
-      _c("img", {
-        staticClass: "img-res",
-        attrs: {
-          src: __webpack_require__(/*! ../../assets/empty-state.svg */ "./resources/assets/empty-state.svg"),
-          alt: "empty chat image"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("h2", [_vm._v(" No new message? ")]),
-      _vm._v(" "),
-      _c("h6", { staticClass: "empty-chat-sub-title" }, [
-        _vm._v(
-          "\n                                        Send your first message below.\n                                    "
-        )
+    return _c("div", { staticClass: "register-image-column" }, [
+      _c("div", { staticClass: "image-holder" }, [
+        _c("img", {
+          attrs: {
+            src: __webpack_require__(/*! ../../assets/login-illustration.svg */ "./resources/assets/login-illustration.svg"),
+            alt: ""
+          }
+        })
       ])
     ])
   }
@@ -39659,7 +39728,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("button", { attrs: { type: "submit" } }, [
-                _vm._v("LOG IN   "),
+                _vm._v("\n            LOG IN   \n            "),
                 _vm.showSpinner
                   ? _c("span", { staticClass: "fa fa-spin fa-spinner" })
                   : _vm._e()
@@ -39669,7 +39738,7 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "text-center m-t-50 link-reg" }, [
             _c("p", { on: { click: _vm.redirectToRegister } }, [
-              _vm._v("Don't have an account? "),
+              _vm._v("\n            Don't have an account?\n            "),
               _c("span", [_vm._v("Register")])
             ])
           ])
@@ -39840,7 +39909,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("button", { attrs: { type: "submit" } }, [
-                _vm._v("SIGN UP   "),
+                _vm._v("\n            SIGN UP   \n            "),
                 _vm.showSpinner
                   ? _c("span", { staticClass: "fa fa-spin fa-spinner" })
                   : _vm._e()
@@ -39848,11 +39917,9 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _c("div", { staticClass: "text-center m-t-50 link-reg" }, [
-            _c("p", { on: { click: _vm.redirectToLogin } }, [
-              _vm._v("Do you have an account?  "),
-              _c("span", [_vm._v("Log in")])
-            ])
+          _c("p", { on: { click: _vm.redirectToLogin } }, [
+            _vm._v("\n          Do you have an account?\n          "),
+            _c("span", [_vm._v("Log in")])
           ])
         ])
       ])
@@ -54913,17 +54980,6 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/assets/empty-state.svg":
-/*!******************************************!*\
-  !*** ./resources/assets/empty-state.svg ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/images/empty-state.svg?20b61e23ab2c7c8443fe03a3e81369c0";
-
-/***/ }),
-
 /***/ "./resources/assets/login-illustration.svg":
 /*!*************************************************!*\
   !*** ./resources/assets/login-illustration.svg ***!
@@ -55027,32 +55083,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.vue */ "./resources/js/App.vue");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 
-
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var app = new Vue({
@@ -55550,8 +55585,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/yemiwebby/tutorial/comet/laravel-chat/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/yemiwebby/tutorial/comet/laravel-chat/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/rosanne/MyProjects/lara-chat-app-starter/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/rosanne/MyProjects/lara-chat-app-starter/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
